@@ -14,9 +14,11 @@ class File {
 
 public:
     File();
-    ~File();
+    int getX() const;
+    int getY() const;
+    std::vector<int> getCells() const;
     void setFilename(const std::string& filename);
-    void getContent();
+    void setContent();
     void setFields();
     void writeResults(const std::vector<std::vector<int>>& tab);
 };

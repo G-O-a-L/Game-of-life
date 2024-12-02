@@ -3,8 +3,12 @@
 // Constructor to initialize the File object with default values
 File::File() : content(""), filename(""), x(0), y(0), cells() {}
 
-// Destructor to free up resources when the File object is destroyed
-File::~File() {}
+// Getter methods to retrieve the x, y, and cell values of the File object
+int File::getX() const { return x; } // Returns the x value
+
+int File::getY() const { return y; } // Returns the y value
+
+std::vector<int> File::getCells() const { return cells; } // Returns the cell values
 
 // Sets the filename for the File object
 void File::setFilename(const std::string& filename) {
@@ -12,7 +16,7 @@ void File::setFilename(const std::string& filename) {
 }
 
 // Reads the content of the file and stores it in the content variable
-void File::getContent() {
+void File::setContent() {
     std::ifstream file(filename);
     if (file.is_open()) {
         std::string line;
@@ -58,7 +62,7 @@ void File::setFields() {
     // Extract the cell values from the content and store them in the cells vector
     for (char c : content.substr(y_end)) {
         // Check if the character is '0' or '1'
-        if (c == '0' || c == '1') {
+        if (c == '0' || c == '1' || c == '2') {
             cells.push_back(c - '0'); // Convert char to int (0 or 1)
         }
     }
