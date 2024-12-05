@@ -89,7 +89,7 @@ public:
     void run() {
         float temporal_step;
         // Demande du pas temporel entre itérations
-        std::cout << "Pas temporel ? (en ms) :";
+        std::cout << "Pas temporel ? (en ms) : ";
         std::cin >> temporal_step;
 
         sf::Clock clock; // Créer un objet qui va suivre le temps

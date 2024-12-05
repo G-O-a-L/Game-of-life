@@ -7,7 +7,7 @@
 #include "FileIn.hpp"
 #include "FileOut.hpp"
 #include "GameLogic.hpp"
-//#include "GUI.hpp"
+#include "GUI.hpp"
 
 class View {
 public:
@@ -37,11 +37,11 @@ void View::cliMethod(FileOut& file_out, GameLogic& gameLogic) {
         file_out.writeResults(gameLogic.getTab());
     }
 }
-/*
+
 void View::guiMethod(FileIn& file_in, GameLogic& gameLogic) {
-    GUI gui;
-    gui.run(file_in.getX(), file_in.getY(), gameLogic);
-}*/
+    GUI gui(file_in.getX(), file_in.getY(), gameLogic);
+    gui.run();
+}
 
 void View::run() {
     FileIn file_in;
@@ -67,7 +67,7 @@ void View::run() {
             break;
 
         case 2:
-            //View().guiMethod(file_in, gameLogic);
+            View().guiMethod(file_in, gameLogic);
             break;
 
         default:
