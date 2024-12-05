@@ -7,7 +7,7 @@
 #include "FileIn.hpp"
 #include "FileOut.hpp"
 #include "GameLogic.hpp"
-#include "GUI.hpp"
+#include "Gui.hpp"
 
 class View {
 public:
