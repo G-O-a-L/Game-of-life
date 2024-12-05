@@ -37,11 +37,11 @@ public:
         length(xmax),/* Le nombre de  ligne  */
         height(ymax),/* Le nombre de  colone */
         gameLogic(gameLogic), /*Notre gameLogic*/
-        window(sf::VideoMode(xmax * cell_size + 100, ymax * cell_size + 100)/* + 50 = taille de la banderole à mettre sous la grille pour mettre les bouttons next et stop*/, "Game of Life, groupe 4" ) {
+        window(sf::VideoMode(xmax * cell_size, ymax * cell_size + 50)/* + 50 = taille de la banderole à mettre sous la grille pour mettre les bouttons next et stop*/, "Game of Life, groupe 4" ) {
 
         // Initialise notre boutton
-        next = ButtonNext(height * cell_size + 2/*Calcul de la hauteur de la grille de cllule, on rajoute 2 pour pouvoir créer uue petite marge*/, 70 , 30);
-        stop = ButtonStop(height * cell_size + 2/*même raison*/, 70 , 30); // y origin // largeur // longueur
+        next = ButtonNext(height * cell_size + 2/*Calcul de la hauteur de la grille de cllule, on rajoute 2 pour pouvoir créer uue petite marge*/);
+        stop = ButtonStop(height * cell_size + 2/*même raison*/); // y origin // largeur // longueur
     }
 
 
@@ -52,9 +52,14 @@ public:
         sf::RectangleShape cell(sf::Vector2f(cell_size - 1.0f, cell_size - 1.0f));
         sf::RectangleShape cell_obstacle(sf::Vector2f(cell_size - 1.0f, cell_size - 1.0f));
 
+        static const sf::Color bg(192,192,192);
+        static const sf::Color color_obs(65,105,225);
+
+
+
         cell.setFillColor(sf::Color::White);
-        cell_obstacle.setFillColor(sf::Color::Blue);
-        bottom_stripe.setFillColor(sf::Color::Green);
+        cell_obstacle.setFillColor(color_obs);
+        bottom_stripe.setFillColor(bg);
 
         std::vector<std::vector<Cell>> to_render = gameLogic.getTab(); // Permet de recevoir la version crnt de tab, qu'il faut ensuite lire
 
@@ -114,14 +119,21 @@ public:
                         RenderWindow();
                     }
 
-                    // Check si une cellule fut cliquée
-                    mousePosition = sf::Mouse::getPosition(window);
+                     // Check si une cellule fut cliquée
+                     if(event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left){
+                     mousePosition = sf::Mouse::getPosition(window);
 
-                    // Si nous avons cliqué sur la zone de la grille de cellule :
-                    if (mousePosition.x <= length * cell_size && mousePosition.x > 0 && mousePosition.y <= height * cell_size && mousePosition.y > 0) {
+                     // Si nous avons cliqué sur la zone de la grille de cellule :
+                     if (mousePosition.x <= length * cell_size && mousePosition.x > 0 && mousePosition.y <= height * cell_size && mousePosition.y > 0) {
                         // On modifie la cellule sur laquelle on a cliqué pour la prochaine itération
-                        gameLogic.modify(int(mousePosition.x / cell_size),int(mousePosition.y / cell_size));
+
+                        std::cout << "I must modify the cell : [" << int(mousePosition.y / cell_size) << "," << int(mousePosition.x / cell_size) << "]" << std::endl;
+
+                        gameLogic.modify(int(mousePosition.y / cell_size),int(mousePosition.x / cell_size));
+
+                        std::cout << "I made it Master" << std::endl;
                         RenderWindow();
+                     }
                     }
                 }
             }

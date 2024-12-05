@@ -52,8 +52,8 @@ public:
         return true;
     }
 
-    void modify(int x, int y) {
+    void modify(int y, int x) {
         // modifie l'état de la cellule
-        crnt_tab[x][y].setState((crnt_tab[x][y].getState() + 1) % 3); // mort -> vie -> obstacle -> mort
+        crnt_tab[y][x].setState(int(crnt_tab[y][x].getState() + 1) % 3); // mort -> vie -> obstacle -> mort
     }
 };
