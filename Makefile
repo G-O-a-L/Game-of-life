@@ -11,7 +11,7 @@ DIRS = $(dir $(SRC))
 INC = $(patsubst %, -I %, $(DIRS))
 
 # Library directories
-LIBS = -lcomdlg32 -lole32
+LIBS = -lcomdlg32 -lole32 -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-network -lsfml-system
 
 # Name of the executable
 TARGET = GoL
