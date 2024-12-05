@@ -32,7 +32,6 @@ void View::cliMethod(FileOut& file_out, GameLogic& gameLogic) {
     }
     for (auto i = 0; i < t; ++i) {
         gameLogic.nextStep(0);
-        
         file_out.writeResults(gameLogic.getTab());
     }
 }
@@ -77,33 +76,50 @@ void View::run() {
 
 bool View::unitTest() {
     // Unit tests for the View class
-    vector<vector<Cell>> grid = {
-        0, 0, 0, 0, 0,
+    std::vector<int> grid = {
+        {0, 0, 0, 0, 0,
         0, 0, 1, 0, 0,
         0, 0, 1, 0, 0,
         0, 0, 1, 0, 0,
-        0, 0, 0, 0, 0
-    }
+        0, 0, 0, 0, 0}
+    };
     GameLogic gameLogic(grid, 5, 5);
+    std::vector<std::vector<Cell>> test_grid = gameLogic.getTab();
 
     gameLogic.nextStep(0);
 
     std::cout << "Unit test grid: " << std::endl;
     for (size_t i = 0; i < 5; ++i) {
         for (size_t j = 0; j < 5; ++j) {
-            std::cout << grid[i, j] << " ";
+            std::cout << std::to_string(test_grid[i][j].getState()) << " ";
         }
+        std::cout << std::endl;
     }
     std::cout << "\n" << std::endl;
 
     std::cout << "Unit test results: " << std::endl;
     for (size_t i = 0; i < 5; ++i) {
         for (size_t j = 0; j < 5; ++j) {
-            std::cout << gameLogic.getCell(i, j).getState() << " ";
+            std::cout << gameLogic.getTab()[i][j].getState() << " ";
         }
+        std::cout << std::endl;
     }
 
-    if (gameLogic.getTab() == grid) {
-        return true;
+    std::vector<std::vector<Cell>> exp_grid = {
+        {Cell(0), Cell(0), Cell(0), Cell(0), Cell(0)},
+        {Cell(0), Cell(0), Cell(0), Cell(0), Cell(0)},
+        {Cell(0), Cell(1), Cell(1), Cell(1), Cell(0)},
+        {Cell(0), Cell(0), Cell(0), Cell(0), Cell(0)},
+        {Cell(0), Cell(0), Cell(0), Cell(0), Cell(0)}
+    };
+    std::cout << std::endl;
+
+    for (size_t i = 0; i < 5; ++i) {
+        for (size_t j = 0; j < 5; ++j) {
+            if (exp_grid[i][j].getState() != gameLogic.getTab()[i][j].getState()) {
+                return false;
+            } else { return true; }
+        }
     }
+    
 }
