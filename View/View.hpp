@@ -15,6 +15,7 @@ public:
     void cliMethod(FileOut& file_out, GameLogic& gameLogic);
     void guiMethod(FileIn& file_in, GameLogic& gameLogic);
     void run();
+    bool unitTest();
 };
 
 View::View() {}
@@ -29,9 +30,7 @@ void View::cliMethod(FileOut& file_out, GameLogic& gameLogic) {
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         std::cin >> t;
     }
-    std::cout << "Iteration number: " << t << std::endl;
     for (auto i = 0; i < t; ++i) {
-        std::cout << "Itera si on " << i + 1 << std::endl;
         gameLogic.nextStep(0);
         
         file_out.writeResults(gameLogic.getTab());
@@ -73,5 +72,38 @@ void View::run() {
         default:
             std::cout << "Invalid choice" << std::endl;
             break;
+    }
+}
+
+bool View::unitTest() {
+    // Unit tests for the View class
+    vector<vector<Cell>> grid = {
+        0, 0, 0, 0, 0,
+        0, 0, 1, 0, 0,
+        0, 0, 1, 0, 0,
+        0, 0, 1, 0, 0,
+        0, 0, 0, 0, 0
+    }
+    GameLogic gameLogic(grid, 5, 5);
+
+    gameLogic.nextStep(0);
+
+    std::cout << "Unit test grid: " << std::endl;
+    for (size_t i = 0; i < 5; ++i) {
+        for (size_t j = 0; j < 5; ++j) {
+            std::cout << grid[i, j] << " ";
+        }
+    }
+    std::cout << "\n" << std::endl;
+
+    std::cout << "Unit test results: " << std::endl;
+    for (size_t i = 0; i < 5; ++i) {
+        for (size_t j = 0; j < 5; ++j) {
+            std::cout << gameLogic.getCell(i, j).getState() << " ";
+        }
+    }
+
+    if (gameLogic.getTab() == grid) {
+        return true;
     }
 }
