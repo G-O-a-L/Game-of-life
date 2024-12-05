@@ -14,8 +14,8 @@ class Button{
 protected:
   // Stocke la représentation graphique
   sf::RectangleShape shape;
-  sf::Text text;
-  sf::Font sharedFont;
+  //sf::Text text;
+  //sf::Font sharedFont;
 
 public:
   virtual ~Button() {}
@@ -24,7 +24,7 @@ public:
 
   void draw(sf::RenderWindow& window){
     window.draw(shape); // Dessine le boutton
-    window.draw(text);  // Dessine le texte
+   // window.draw(text);  // Dessine le texte
   }
 };
 
@@ -47,26 +47,27 @@ public:
     shape.setPosition(x,y);
 
     // Séléction de la police d'écriture
-    if(!sharedFont.loadFromFile("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf")) {
+    /*
+    if(!sharedFont.loadFromFile("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf")){
       // Gestion d'erreur si la police ne charge pas
-      throw std::runtime_error("Impossible de charger la police");
-    }
+      if(!sharedFont.loadFromFile("arial.ttf")) throw std::runtime_error("Impossible de charger la police");
+    }*/
 
     // Paramétrage de la police d'écriture
 
-    text.setFont(sharedFont); // Indique la police du texte
+    //text.setFont(sharedFont); // Indique la police du texte
 
-    text.setString("next"); /// Ce que l'on écris
+    //text.setString("next"); /// Ce que l'on écris
 
-    text.setCharacterSize(12); // La taille de la police
+    //text.setCharacterSize(6); // La taille de la police
 
-    text.setFillColor(sf::Color::White); // couleur du texte
+    //text.setFillColor(sf::Color::White); // couleur du texte
 
     // Centrer le texte de surle boutton (méthode de Set Origin)
 
-    sf::FloatRect textBounds = text.getLocalBounds(); // Permet d'obtenir les bordures de notre boutton
+    //sf::FloatRect textBounds = text.getLocalBounds(); // Permet d'obtenir les bordures de notre boutton
       
-    text.setPosition(y + 3, x + 2); // On écris le texte sur le bouton
+    //text.setPosition(y + 3, x + 2); // On écris le texte sur le bouton
   }
 
   // En fonction de la sortie, il y aura un code dans GUI qui sera utilisé pour lancer la prochaine itération
@@ -101,10 +102,11 @@ public:
     shape.setPosition(x,y);
 
     // Séléction de la police d'écriture
+    /*
     if(!sharedFont.loadFromFile("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf")){
-      // Gestion d'erreur si la police ne charge pas
-      throw std::runtime_error("Impossible de charger la police");
+      if(!sharedFont.loadFromFile("arial.ttf")) throw std::runtime_error("Impossible de charger la police");
     }
+    
     
     // Paramétrage de la police d'écriture
 
@@ -112,7 +114,7 @@ public:
 
     text.setString("stop"); /// Ce que l'on écris
 
-    text.setCharacterSize(12); // La taille de la police
+    text.setCharacterSize(6); // La taille de la police
 
     text.setFillColor(sf::Color::White); // couleur du texte
 
@@ -121,6 +123,7 @@ public:
     sf::FloatRect textBounds = text.getLocalBounds(); // Permet d'obtenir les bordures de notre boutton
       
     text.setPosition(y + 3, x + 2); // On écris le texte sur le bouton
+    */
   }
 
   // En fonction de la sortie, il y aura un code dans GUI qui sera utilisé pour lancer la prochaine itération
