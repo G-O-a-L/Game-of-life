@@ -29,18 +29,18 @@ public:
                 int cpt = 0;
 
                 if (y - 1 < 0) {
-        yUp = ymax - 1; // Prise en charge des indices négatif pour avoid segmentation fault
+                    yUp = ymax - 1; // Prise en charge des indices négatif pour avoid segmentation fault
                 } else {
-        yUp = y-1;
-        }
-                
+                    yUp = y-1;
+                }
+
                 yDown = (y + 1) % ymax;
 
                 if (x-1 < 0) {
-        xLeft = xmax - 1; // Prise en charge des indices négatif pour avoid segmentation fault
+                    xLeft = xmax - 1; // Prise en charge des indices négatif pour avoid segmentation fault
                 } else {
-        xLeft = x-1;
-        }
+                    xLeft = x-1;
+                }
 
                 xRight = (x + 1) % xmax;
 
