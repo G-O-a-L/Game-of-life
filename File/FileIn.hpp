@@ -88,6 +88,8 @@ void FileIn::setContent() {
             content += line + "\n";
         }
         file.close();
+    } else {
+        std::cerr << "Erreur lors de l'ouverture du fichier." << std::endl;
     }
 }
 

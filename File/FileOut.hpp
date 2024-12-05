@@ -21,13 +21,17 @@ FileOut::FileOut() {}
 void FileOut::writeResults(const std::vector<std::vector<Cell>>& tab) {
     std::cout << "Writing results to file..." << std::endl;
     std::ofstream file(file_in.getFilename() + "_out.txt", std::ios::app);
-    file << file_in.getX() << " " << file_in.getY() << "\n";
-    for (const auto& row : tab) {
-        for (Cell cell : row) {
-            file << cell.getState() << " ";
+    if (file.is_open()) {
+        file << file_in.getX() << " " << file_in.getY() << "\n";
+        for (const auto& row : tab) {
+            for (Cell cell : row) {
+                file << cell.getState() << " ";
+            }
+            file << "\n";
         }
         file << "\n";
+        file.close();
+    } else {
+        std::cerr << "Erreur lors de l'ouverture du fichier." << std::endl;
     }
-    file << "\n";
-    file.close();
 }
