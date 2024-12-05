@@ -85,7 +85,7 @@ public:
         if (mode == 1) {
             // GUI : 1
             if (checkIfSame()) {
-                throw runtime_error("Fin du programme, les deux dernière étapes sont identiques");
+                throw runtime_error("Fin du programme, les deux dernières étapes sont identiques");
             }
         }
         nextToCurrent();
