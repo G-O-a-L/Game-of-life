@@ -126,12 +126,8 @@ public:
                      // Si nous avons cliqué sur la zone de la grille de cellule :
                      if (mousePosition.x <= length * cell_size && mousePosition.x > 0 && mousePosition.y <= height * cell_size && mousePosition.y > 0) {
                         // On modifie la cellule sur laquelle on a cliqué pour la prochaine itération
-
-                        std::cout << "I must modify the cell : [" << int(mousePosition.y / cell_size) << "," << int(mousePosition.x / cell_size) << "]" << std::endl;
-
                         gameLogic.modify(int(mousePosition.y / cell_size),int(mousePosition.x / cell_size));
 
-                        std::cout << "I made it Master" << std::endl;
                         RenderWindow();
                      }
                     }
