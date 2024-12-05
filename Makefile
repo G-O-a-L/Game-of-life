@@ -10,8 +10,18 @@ DIRS = $(dir $(SRC))
 # Add -I before each directory
 INC = $(patsubst %, -I %, $(DIRS))
 
-# Library directories
-LIBS = -lcomdlg32 -lole32 -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-network -lsfml-system
+# Détection du système d'exploitation
+UNAME := $(shell uname)
+OS_RELEASE := $(shell grep -o Microsoft /proc/version 2>/dev/null)
+
+# Bibliothèques à utiliser
+ifeq ($(OS),Windows_NT)  # Cas pour Windows natif
+    LIBS = -lcomdlg32 -lole32 -lsfml-graphics -lsfml-window -lsfml-system
+else ifneq ($(OS_RELEASE),)  # Cas pour WSL
+    LIBS = -lsfml-graphics -lsfml-window -lsfml-system
+else ifeq ($(UNAME), Linux)  # Cas pour Linux natif
+    LIBS = -lsfml-graphics -lsfml-window -lsfml-system
+endif
 
 # Name of the executable
 TARGET = GoL

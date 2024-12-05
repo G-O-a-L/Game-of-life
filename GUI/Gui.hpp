@@ -77,7 +77,7 @@ public:
                 }
             }
         }
-        bottom_stripe.setPosition(0, cell_size * gridHeight);
+        bottom_stripe.setPosition(0, cell_size * height);
         window.draw(bottom_stripe); // Dessine la bande du bas
 
         next.draw(window); // Dessine le boutton next
