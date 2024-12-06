@@ -9,6 +9,7 @@
 #include <cstdlib>
 #include <iostream>
 #include<stdexcept>
+#include <algorithm>
 
 class GUI{
 private:
@@ -33,10 +34,10 @@ public:
     // Constructeur de GUI
 
     GUI(int xmax, int ymax, GameLogic& gameLogic) : 
-        cell_size(1000/int(xmax * ymax)), /*Adapte la taille des cellules en fonction du nombre de cellule demandé*/
         length(xmax),/* Le nombre de  ligne  */
         height(ymax),/* Le nombre de  colone */
         gameLogic(gameLogic), /*Notre gameLogic*/
+        cell_size(std::max(5,2000/int(xmax * ymax))), /*Adapte la taille des cellules en fonction du nombre de cellule demandé*/
         window(sf::VideoMode(xmax * cell_size, ymax * cell_size + 50)/* + 50 = taille de la banderole à mettre sous la grille pour mettre les bouttons next et stop*/, "Game of Life, groupe 4" ) {
 
         // Initialise notre boutton
@@ -96,13 +97,6 @@ public:
         // Demande du pas temporel entre itérations
         std::cout << "Pas temporel ? (en ms) : ";
         std::cin >> temporal_step;
-        while (std::cin.fail()) {
-            std::cout << "Invalid input. Please enter a valid float: ";
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cin >> temporal_step;
-        }
-    }
 
         sf::Clock clock; // Créer un objet qui va suivre le temps
     
@@ -136,6 +130,12 @@ public:
                         gameLogic.modify(int(mousePosition.y / cell_size),int(mousePosition.x / cell_size));
 
                         RenderWindow();
+                     }
+
+                     //Bouton invisible secret 5*5 en pause pour éditer le temps entre les itération (easter egg)
+                     if (mousePosition.x <= length * cell_size && mousePosition.x > height * cell_size - 5 && mousePosition.y <= height * cell_size + 50-5 && mousePosition.y >  mousePosition.y <= height * cell_size + 50-5) {
+                        std::cout << "Nouvelle intervale de temps voulue : " << std::endl;
+                        std::cin >> temporal_step;
                      }
                     }
                 }
