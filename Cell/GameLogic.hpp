@@ -26,6 +26,7 @@ public:
 
         tbb::parallel_for(size_t(0),current_tab.size(),[&](size_t y) {
             for (size_t(x) = 0; x < xmax; x++) {
+                if(current_tab[y][x].getState() == 1 || current_tab[y][x].getState() == 0){ // Si la cellule est obstacle, on ne s'embête pas à calculer son voisinage
                 int cpt = 0;
                 size_t yUp = (y == 0) ? ymax - 1 : y - 1;
                 size_t yDown = (y + 1) % ymax;
@@ -64,6 +65,7 @@ public:
                 // Si la cellule actuelle est morte
                 else if (current_tab[y][x].getState() == 0 && cpt == 3) {
                     next_tab[y][x].setState(1);       
+                }
                 }
             }
         });
