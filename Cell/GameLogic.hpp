@@ -3,7 +3,7 @@
 #include <vector>
 #include <stdexcept>
 #include <iostream>
-
+#include <tbb/tbb.h>
 #include "Grid.hpp"
 
 using namespace std;
@@ -18,31 +18,26 @@ public:
         std::vector<std::vector<Cell>> current_tab = getTab(); // Accède au tableau crnt
         std::vector<std::vector<Cell>> next_tab = getTab(); // Accède au tableau crnt
 
+        for(int j = 0; j < current_tab.size();j++){
+            for(int i = 0 ; i < current_tab[0].size(); i++){
+                std::cout << current_tab[j][i].getState() << " ";
+            }
+            std::cout << "\n";
+        }
+
         xmax = current_tab[0].size();
         ymax = current_tab.size();
         // Calcul de la prochaine étape
 
-        int xLeft, xRight, yUp, yDown;
+        size_t xLeft, xRight, yUp, yDown;
 
-        for (int y = 0; y < ymax; y++) {
-            for (int x = 0; x < xmax; x++) {
+        tbb::parallel_for(size_t(0),current_tab.size(),[&](size_t y) {
+            for (size_t(x) = 0; x < xmax; x++) {
                 int cpt = 0;
-
-                if (y - 1 < 0) {
-                    yUp = ymax - 1; // Prise en charge des indices négatif pour avoid segmentation fault
-                } else {
-                    yUp = y-1;
-                }
-
-                yDown = (y + 1) % ymax;
-
-                if (x-1 < 0) {
-                    xLeft = xmax - 1; // Prise en charge des indices négatif pour avoid segmentation fault
-                } else {
-                    xLeft = x-1;
-                }
-
-                xRight = (x + 1) % xmax;
+                size_t yUp = (y == 0) ? ymax - 1 : y - 1;
+                size_t yDown = (y + 1) % ymax;
+                size_t xLeft = (x == 0) ? xmax - 1 : x - 1;
+                size_t xRight = (x + 1) % xmax;
 
                 if (current_tab[yDown][x].getState() == 1) {
                     ++cpt;
@@ -78,14 +73,14 @@ public:
                     next_tab[y][x].setState(1);       
                 }
             }
-        }
+        });
 
         setNextTab(next_tab);
 
         if (mode == 1) {
             // GUI : 1
             if (checkIfSame()) {
-                throw runtime_error("Fin du programme, les deux dernières étapes sont identiques");
+                throw runtime_error("Fin du programme, les deux dernière étapes sont identiques");
             }
         }
         nextToCurrent();

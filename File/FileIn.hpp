@@ -102,24 +102,9 @@ void FileIn::setFields() {
 
     // Find the start and end positions of the y value
     size_t y_start = content.find_first_not_of(' ', x_end);
-    size_t y_end;
 
     // Find the positions of the space and newline characters after the y value
-    size_t space_pos = content.find_first_of(' ', y_start);
-    size_t newline_pos = content.find_first_of('\n', y_start);
-
-    // Determine the end position of the y value
-    if (space_pos == std::string::npos) {
-        // Only the newline character is found
-        y_end = newline_pos;
-    } else {
-        // Both space and newline characters are found, compare their distances
-        if (y_start - space_pos < y_start - newline_pos) {
-            y_end = space_pos;
-        } else {
-            y_end = newline_pos;
-        }
-    }
+    size_t y_end = content.find_first_of(" \n", y_start);
 
     // Extract the x and y values from the content
     x = std::stoi(content.substr(x_start, x_end - x_start));
