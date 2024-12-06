@@ -96,6 +96,13 @@ public:
         // Demande du pas temporel entre itérations
         std::cout << "Pas temporel ? (en ms) : ";
         std::cin >> temporal_step;
+        while (std::cin.fail()) {
+            std::cout << "Invalid input. Please enter a valid float: ";
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cin >> temporal_step;
+        }
+    }
 
         sf::Clock clock; // Créer un objet qui va suivre le temps
     

@@ -18,13 +18,6 @@ public:
         std::vector<std::vector<Cell>> current_tab = getTab(); // Accède au tableau crnt
         std::vector<std::vector<Cell>> next_tab = getTab(); // Accède au tableau crnt
 
-        for(int j = 0; j < current_tab.size();j++){
-            for(int i = 0 ; i < current_tab[0].size(); i++){
-                std::cout << current_tab[j][i].getState() << " ";
-            }
-            std::cout << "\n";
-        }
-
         xmax = current_tab[0].size();
         ymax = current_tab.size();
         // Calcul de la prochaine étape
