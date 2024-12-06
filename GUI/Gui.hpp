@@ -11,150 +11,185 @@
 #include<stdexcept>
 #include <algorithm>
 
+// Class representing the Graphical User Interface (GUI) for the Game of Life
 class GUI{
 private:
+    // Reference to the GameLogic object
     GameLogic& gameLogic;
 
+    // Size of each cell in the grid
     int cell_size;
+    // Number of rows in the grid
     int length;
+    // Number of columns in the grid
     int height;
 
+    // SFML window object
     sf::RenderWindow window;
     
-    std::vector<int> cellstate;   // Pour des fins de tests, je simule la grille ***test
-    std::vector<std::vector<int>> grid; // Pour simuler l'entrée d'une grille ***test
+    // Vector to store the state of each cell (for testing purposes)
+    std::vector<int> cellstate;   
+    // 2D vector to store the grid (for testing purposes)
+    std::vector<std::vector<int>> grid; 
 
-    sf::Vector2i mousePosition; // Vecteur qui sert à stocker al position actuelle 
+    // Vector to store the current mouse position
+    sf::Vector2i mousePosition; 
 
 public:
 
+    // Button objects for next and stop actions
     ButtonNext next;
     ButtonStop stop;
 
-    // Constructeur de GUI
-
+    // Constructor for the GUI class
     GUI(int xmax, int ymax, GameLogic& gameLogic) : 
-        length(xmax),/* Le nombre de  ligne  */
-        height(ymax),/* Le nombre de  colone */
-        gameLogic(gameLogic), /*Notre gameLogic*/
-        cell_size(std::max(5,2000/int(xmax * ymax))), /*Adapte la taille des cellules en fonction du nombre de cellule demandé*/
-        window(sf::VideoMode(xmax * cell_size, ymax * cell_size + 50)/* + 50 = taille de la banderole à mettre sous la grille pour mettre les bouttons next et stop*/, "Game of Life, groupe 4" ) {
+        length(xmax),/* Number of rows in the grid */
+        height(ymax),/* Number of columns in the grid */
+        gameLogic(gameLogic), /* Reference to the GameLogic object */
+        cell_size(std::max(5,2000/int(xmax * ymax))), /* Calculate cell size based on grid size */
+        window(sf::VideoMode(xmax * cell_size, ymax * cell_size + 50)/* Create window with specified size */, "Game of Life, groupe 4" ) {
 
-        // Initialise notre boutton
-        next = ButtonNext(height * cell_size + 2/*Calcul de la hauteur de la grille de cllule, on rajoute 2 pour pouvoir créer uue petite marge*/);
-        stop = ButtonStop(height * cell_size + 2/*même raison*/); // y origin // largeur // longueur
+        // Initialize next and stop buttons
+        next = ButtonNext(height * cell_size + 2/* Calculate button position */);
+        stop = ButtonStop(height * cell_size + 2/* Calculate button position */); 
     }
 
 
+    // Function to render the window
     void RenderWindow() {
-        window.clear(); // La fenêtre est clear, prête pour être redessinée
+        // Clear the window
+        window.clear(); 
 
+        // Create rectangle shapes for the bottom stripe and cells
         sf::RectangleShape bottom_stripe(sf::Vector2f(length * cell_size, 50));
         sf::RectangleShape cell(sf::Vector2f(cell_size - 1.0f, cell_size - 1.0f));
         sf::RectangleShape cell_obstacle(sf::Vector2f(cell_size - 1.0f, cell_size - 1.0f));
 
+        // Define colors for the background and obstacles
         static const sf::Color bg(192,192,192);
         static const sf::Color color_obs(65,105,225);
 
-
-
+        // Set fill colors for the shapes
         cell.setFillColor(sf::Color::White);
         cell_obstacle.setFillColor(color_obs);
         bottom_stripe.setFillColor(bg);
 
-        std::vector<std::vector<Cell>> to_render = gameLogic.getTab(); // Permet de recevoir la version crnt de tab, qu'il faut ensuite lire
+        // Get the current state of the grid from the GameLogic object
+        std::vector<std::vector<Cell>> to_render = gameLogic.getTab(); 
 
+        // Check if the grid is empty
         if (to_render.empty()) {
+            // Throw an exception if the grid is empty
             throw std::runtime_error("Invalid array, can't display nothing");
         }
 
-        // Dessine l'ensemble des cases en fonction de l'état des cellules
-        for (int y = 0; y < to_render.size(); y++) { // Pour chaque ligne, jusqu'à la ligne max
-            for (int x = 0; x < to_render[0].size(); x++) { // Pour chaque colonne jusqu'à la colone max
-                // Si la cellule est vivante
+        // Draw each cell in the grid based on its state
+        for (int y = 0; y < to_render.size(); y++) { 
+            for (int x = 0; x < to_render[0].size(); x++) { 
+                // If the cell is alive
                 if (to_render[y][x].getState() == 1) {
+                    // Set the cell's position and draw it
                     cell.setPosition(x * cell_size, y * cell_size);
                     window.draw(cell);
                 }
-                // Si la cellule est morte
-                else if (to_render[y][x].getState() != 0 && to_render[y][x].getState() != 1) { // Si la cellule est une cellule obstacle
+                // If the cell is an obstacle
+                else if (to_render[y][x].getState() != 0 && to_render[y][x].getState() != 1) { 
+                    // Set the obstacle's position and draw it
                     cell_obstacle.setPosition(x * cell_size, y * cell_size);
                     window.draw(cell_obstacle);
                 }
             }
         }
+        // Set the bottom stripe's position and draw it
         bottom_stripe.setPosition(0, cell_size * height);
-        window.draw(bottom_stripe); // Dessine la bande du bas
+        window.draw(bottom_stripe); 
 
-        next.draw(window); // Dessine le boutton next
-        stop.draw(window); // Dessine le boutton stop
+        // Draw the next and stop buttons
+        next.draw(window); 
+        stop.draw(window); 
 
-        window.display(); // Montre la fenêtre qui vient d'être dessinée
+        // Display the window
+        window.display(); 
     }
 
+    // Function to run the game
     void run() {
+        // Variable to store the time step
         float temporal_step;
+        // Variable to store whether the game is finite or infinite
         bool finite = 1;
-        // Demande du pas temporel entre itérations
+        // Prompt the user for the time step
         std::cout << "Pas temporel ? (en ms) : ";
         std::cin >> temporal_step;
 
-        sf::Clock clock; // Créer un objet qui va suivre le temps
+        // Create a clock object to track time
+        sf::Clock clock; 
     
+        // Main game loop
         while (window.isOpen()) {
+            // Event object to handle user input
             sf::Event event;
-            static bool bstop = 0; // On commence avec la GUI qui n'est pas en pause
+            // Variable to store whether the game is paused
+            static bool bstop = 0; 
+            // Handle events
             while (window.pollEvent(event)) {
-                // Si la fenêtre est fermée, on ferme la fenêtre
+                // If the window is closed, close it
                 if (event.type == sf::Event::Closed) window.close();
 
-                if (stop.handleEvent(event, window)) { // Si c'est le boutton stop qui est pressé
+                // If the stop button is pressed, toggle the pause state
+                if (stop.handleEvent(event, window)) { 
                     bstop = !bstop;
-                    clock.restart(); // Reset le compteur
+                    clock.restart(); 
                 }
 
-                if (bstop) { // Si bstop = true donc si le jeu est en pause
-
-                    // Only mark for render if next button is clicked
+                // If the game is paused
+                if (bstop) { 
+                    // If the next button is pressed, advance to the next step
                     if (next.handleEvent(event, window)) {
-                        gameLogic.nextStep(finite); // Itération suivante
+                        gameLogic.nextStep(finite); 
                         RenderWindow();
                     }
 
-                     // Check si une cellule fut cliquée
-                     if(event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left){
-                     mousePosition = sf::Mouse::getPosition(window);
+                    // Check if a cell was clicked
+                    if(event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left){
+                        // Get the current mouse position
+                        mousePosition = sf::Mouse::getPosition(window);
 
-                     // Si nous avons cliqué sur la zone de la grille de cellule :
-                     if (mousePosition.x <= length * cell_size && mousePosition.x > 0 && mousePosition.y <= height * cell_size && mousePosition.y > 0) {
-                        // On modifie la cellule sur laquelle on a cliqué pour la prochaine itération
-                        gameLogic.modify(int(mousePosition.y / cell_size),int(mousePosition.x / cell_size));
+                        // If the click was within the grid
+                        if (mousePosition.x <= length * cell_size && mousePosition.x > 0 && mousePosition.y <= height * cell_size && mousePosition.y > 0) {
+                            // Modify the cell at the clicked position
+                            gameLogic.modify(int(mousePosition.y / cell_size),int(mousePosition.x / cell_size));
 
-                        RenderWindow();
-                     }
+                            // Render the window
+                            RenderWindow();
+                        }
 
-                     //Bouton invisible secret 5*5 en pause pour éditer le temps entre les itération (easter egg)
-                     if (mousePosition.x <= length * cell_size && mousePosition.x > length * cell_size - 5 && mousePosition.y <= height * cell_size + 50 &&  mousePosition.y >= height * cell_size + 50-5) {
-                        std::cout << "Nouvelle intervale de temps voulue : " << std::endl;
-                        std::cin >> temporal_step;
-                     }
-                     //Bouton invisible secretn°2 5*5 en pause pour éditer le temps entre les itération (easter egg)
-                     if (mousePosition.x <= length * cell_size && mousePosition.x > length * cell_size - 5 && mousePosition.y <= height * cell_size + 50-6 && mousePosition.y >= height * cell_size + 50-11) {
-                        std::cout << "infinite easter egg" << std::endl;
-                        finite = !finite;
-                     }
+                        // Check for secret buttons (easter eggs)
+                        if (mousePosition.x <= length * cell_size && mousePosition.x > length * cell_size - 5 && mousePosition.y <= height * cell_size + 50 &&  mousePosition.y >= height * cell_size + 50-5) {
+                            // Prompt the user for a new time step
+                            std::cout << "Nouvelle intervale de temps voulue : " << std::endl;
+                            std::cin >> temporal_step;
+                        }
+                        if (mousePosition.x <= length * cell_size && mousePosition.x > length * cell_size - 5 && mousePosition.y <= height * cell_size + 50-6 && mousePosition.y >= height * cell_size + 50-11) {
+                            // Toggle the finite/infinite state
+                            std::cout << "infinite easter egg" << std::endl;
+                            finite = !finite;
+                        }
                     }
                 }
             }
 
-            if (!bstop) { // Si l'on n'est pas en pause
-                // Délai 
+            // If the game is not paused
+            if (!bstop) { 
+                // Check if the time step has passed
                 if (clock.getElapsedTime().asMilliseconds() >= temporal_step) {
-                    gameLogic.nextStep(finite); // à la fin du délai, on passe à l'itération suivante
+                    // Advance to the next step
+                    gameLogic.nextStep(finite); 
                     RenderWindow();
-                    clock.restart(); // Reset le compteur
+                    clock.restart(); 
                 }
             }
+            // Sleep for 10 milliseconds
             sf::sleep(sf::milliseconds(10));
         }
     }

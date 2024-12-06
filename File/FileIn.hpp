@@ -1,5 +1,6 @@
 #pragma once
 
+// Include necessary libraries for file dialogs, input/output, strings, vectors, file streams, and algorithms
 #include "tinyfiledialogs.h"
 #include <iostream>
 #include <string>
@@ -7,7 +8,9 @@
 #include <fstream>
 #include <algorithm>
 
+// Define a class to handle file input
 class FileIn {
+    // Static variables to store file path, filename, content, x, y, and cell values
     static std::string file_path;
     static std::string filename;
     static std::string content;
@@ -16,16 +19,25 @@ class FileIn {
     std::vector<int> cells;
 
 public:
+    // Constructor to initialize the File object with default values
     FileIn();
+    // Getter method to retrieve the filename
     std::string getFilename() const;
+    // Getter method to retrieve the x value
     int getX() const;
+    // Getter method to retrieve the y value
     int getY() const;
+    // Getter method to retrieve the cell values
     std::vector<int> getCells() const;
+    // Method to set the filename
     void setFilename();
+    // Method to read the content of the file
     void setContent();
+    // Method to extract x, y, and cell values from the content
     void setFields();
 };
 
+// Initialize static variables with default values
 std::string FileIn::file_path = "";
 std::string FileIn::filename = "";
 std::string FileIn::content = "";
@@ -34,42 +46,48 @@ int FileIn::y = 0;
 
 // Constructor to initialize the File object with default values
 FileIn::FileIn() {
+    // Check if the file path is empty
     if (file_path.empty()) {
-        //while (true) {
-            // Titre et chemin initial
-            const char* path = tinyfd_openFileDialog(
-            "Choose a file", // Titre de la fenêtre
-            "",                   // Chemin initial (vide = dossier par défaut)
-            0,                    // Nombre de filtres
-            nullptr,              // Filtres (ex: {"*.txt", "*.doc"})
-            nullptr,              // Description du filtre (ex: "Fichiers texte")
-            0                     // Mode de sélection multiple (0 = désactivé)
-            );
+        // Open a file dialog to select a file
+        const char* path = tinyfd_openFileDialog(
+            "Choose a file", // Title of the dialog
+            "",                   // Initial path (empty = default directory)
+            0,                    // Number of filters
+            nullptr,              // Filters (e.g., {"*.txt", "*.doc"})
+            nullptr,              // Filter descriptions (e.g., "Text files")
+            0                     // Multiple selection mode (0 = disabled)
+        );
 
-            if (path) {
-                std::cout << "Selected File: " << path << std::endl;
-                file_path = path;
-                std::cout << "File Path: " << file_path << std::endl;
-                //break;
-            }
-        //}
+        // Check if a file was selected
+        if (path) {
+            // Print the selected file path
+            std::cout << "Selected File: " << path << std::endl;
+            // Store the selected file path
+            file_path = path;
+            // Print the stored file path
+            std::cout << "File Path: " << file_path << std::endl;
+        }
     }
 }
 
-// Getter methods to retrieve the x, y, and cell values of the File object
-std::string FileIn::getFilename() const { return filename; } // Returns the x value
+// Getter method to retrieve the filename
+std::string FileIn::getFilename() const { return filename; }
 
-int FileIn::getX() const { return x; } // Returns the x value
+// Getter method to retrieve the x value
+int FileIn::getX() const { return x; }
 
-int FileIn::getY() const { return y; } // Returns the y value
+// Getter method to retrieve the y value
+int FileIn::getY() const { return y; }
 
-std::vector<int> FileIn::getCells() const { return cells; } // Returns the cell values
+// Getter method to retrieve the cell values
+std::vector<int> FileIn::getCells() const { return cells; }
 
-// Sets the filename for the File object
+// Method to set the filename
 void FileIn::setFilename() {
+    // Replace backslashes with forward slashes in the file path
     std::replace(file_path.begin(), file_path.end(), '\\', '/');
 
-    // Extraire le nom du fichier sans le chemin
+    // Extract the filename from the file path
     int f_start = file_path.find_last_of('/');
     if (filename.find_first_of('.') != std::string::npos) {
         filename = file_path.substr(f_start + 1);
@@ -79,22 +97,27 @@ void FileIn::setFilename() {
     }
 }
 
-// Reads the content of the file and stores it in the content variable
+// Method to read the content of the file
 void FileIn::setContent() {
+    // Open the file for reading
     std::ifstream file(file_path);
+    // Check if the file was opened successfully
     if (file.is_open()) {
+        // Read the file line by line
         std::string line;
         while (std::getline(file, line)) {
+            // Append each line to the content string
             content += line + "\n";
         }
+        // Close the file
         file.close();
     } else {
+        // Print an error message if the file could not be opened
         std::cerr << "Erreur lors de l'ouverture du fichier." << std::endl;
     }
 }
 
-// Extracts the x and y values from the content and stores them in the x and y variables
-// Also extracts the cell values and stores them in the cells vector
+// Method to extract x, y, and cell values from the content
 void FileIn::setFields() {
     // Find the start and end positions of the x value
     size_t x_start = content.find_first_not_of(' ');
@@ -114,7 +137,8 @@ void FileIn::setFields() {
     for (char c : content.substr(y_end)) {
         // Check if the character is '0' or '1'
         if (c == '0' || c == '1') {
-            cells.push_back(c - '0'); // Convert char to int (0 or 1)
+            // Convert the character to an integer (0 or 1) and add it to the cells vector
+            cells.push_back(c - '0');
         }
     }
 }
