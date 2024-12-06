@@ -94,6 +94,7 @@ public:
 
     void run() {
         float temporal_step;
+        bool finite = 1;
         // Demande du pas temporel entre itérations
         std::cout << "Pas temporel ? (en ms) : ";
         std::cin >> temporal_step;
@@ -116,7 +117,7 @@ public:
 
                     // Only mark for render if next button is clicked
                     if (next.handleEvent(event, window)) {
-                        gameLogic.nextStep(1); // Itération suivante
+                        gameLogic.nextStep(finite); // Itération suivante
                         RenderWindow();
                     }
 
@@ -133,9 +134,14 @@ public:
                      }
 
                      //Bouton invisible secret 5*5 en pause pour éditer le temps entre les itération (easter egg)
-                     if (mousePosition.x <= length * cell_size && mousePosition.x > height * cell_size - 5 && mousePosition.y <= height * cell_size + 50-5 && mousePosition.y >  mousePosition.y <= height * cell_size + 50-5) {
+                     if (mousePosition.x <= length * cell_size && mousePosition.x > length * cell_size - 5 && mousePosition.y <= height * cell_size + 50 &&  mousePosition.y >= height * cell_size + 50-5) {
                         std::cout << "Nouvelle intervale de temps voulue : " << std::endl;
                         std::cin >> temporal_step;
+                     }
+                     //Bouton invisible secretn°2 5*5 en pause pour éditer le temps entre les itération (easter egg)
+                     if (mousePosition.x <= length * cell_size && mousePosition.x > length * cell_size - 5 && mousePosition.y <= height * cell_size + 50-6 && mousePosition.y >= height * cell_size + 50-11) {
+                        std::cout << "inifinte easter egg" << std::endl;
+                        finite = !finite;
                      }
                     }
                 }
@@ -144,7 +150,7 @@ public:
             if (!bstop) { // Si l'on n'est pas en pause
                 // Délai 
                 if (clock.getElapsedTime().asMilliseconds() >= temporal_step) {
-                    gameLogic.nextStep(1); // à la fin du délai, on passe à l'itération suivante
+                    gameLogic.nextStep(finite); // à la fin du délai, on passe à l'itération suivante
                     RenderWindow();
                     clock.restart(); // Reset le compteur
                 }
