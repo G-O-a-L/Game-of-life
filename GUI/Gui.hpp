@@ -140,7 +140,7 @@ public:
                      }
                      //Bouton invisible secretn°2 5*5 en pause pour éditer le temps entre les itération (easter egg)
                      if (mousePosition.x <= length * cell_size && mousePosition.x > length * cell_size - 5 && mousePosition.y <= height * cell_size + 50-6 && mousePosition.y >= height * cell_size + 50-11) {
-                        std::cout << "inifinte easter egg" << std::endl;
+                        std::cout << "infinite easter egg" << std::endl;
                         finite = !finite;
                      }
                     }
