@@ -8,7 +8,7 @@
 #include <ctime>
 #include <cstdlib>
 #include <iostream>
-#include<stdexcept>
+#include <stdexcept>
 #include <algorithm>
 
 // Class representing the Graphical User Interface (GUI) for the Game of Life
@@ -137,8 +137,17 @@ public:
                 if (event.type == sf::Event::Closed) window.close();
 
                 // If the stop button is pressed, toggle the pause state
-                if (stop.handleEvent(event, window)) { 
+                if (stop.handleEvent(event, window)) {
                     bstop = !bstop;
+                    if (bstop == 0) {
+                        char choice;
+                        std::cout << "You want to define a new temporal step? (y | n) " << std::endl;
+                        std::cin >> choice;
+                        if (choice == 'y') {
+                            std::cout << "New temporal step: " << std::endl;
+                            std::cin >> temporal_step;
+                        }
+                    }
                     clock.restart(); 
                 }
 
@@ -162,13 +171,6 @@ public:
 
                             // Render the window
                             RenderWindow();
-                        }
-
-                        // Check for secret buttons (easter eggs)
-                        if (mousePosition.x <= length * cell_size && mousePosition.x > length * cell_size - 5 && mousePosition.y <= height * cell_size + 50 &&  mousePosition.y >= height * cell_size + 50-5) {
-                            // Prompt the user for a new time step
-                            std::cout << "Nouvelle intervale de temps voulue : " << std::endl;
-                            std::cin >> temporal_step;
                         }
                         if (mousePosition.x <= length * cell_size && mousePosition.x > length * cell_size - 5 && mousePosition.y <= height * cell_size + 50-6 && mousePosition.y >= height * cell_size + 50-11) {
                             // Toggle the finite/infinite state

@@ -18,9 +18,9 @@ OS_RELEASE := $(shell grep -o Microsoft /proc/version 2>/dev/null)
 ifeq ($(OS),Windows_NT)  # Cas pour Windows natif
     LIBS = -lcomdlg32 -lole32 -lsfml-graphics -lsfml-window -lsfml-system -ltbb
 else ifneq ($(OS_RELEASE),)  # Cas pour WSL
-    LIBS = -lsfml-graphics -lsfml-window -lsfml-system -ltbb
+    LIBS = -lsfml-graphics -lsfml-window -lsfml-system -ltbb -W 2>/dev/null
 else ifeq ($(UNAME), Linux)  # Cas pour Linux natif
-    LIBS = -lsfml-graphics -lsfml-window -lsfml-system -ltbb
+    LIBS = -lsfml-graphics -lsfml-window -lsfml-system -ltbb -W 2>/dev/null
 endif
 
 # Name of the executable
