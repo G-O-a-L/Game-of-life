@@ -14,15 +14,11 @@ void GameLogic::nextStep(const bool mode) {
     // Get the dimensions of the grid
     xmax = current_tab[0].size();
     ymax = current_tab.size();
-    
-    // Calculate the next step
-    
-    size_t xLeft, xRight, yUp, yDown;
 
     // Use parallel processing to speed up the calculation
     tbb::parallel_for(size_t(0), current_tab.size(), [&](size_t y) {
         // Iterate over each cell in the grid
-        for (size_t(x) = 0; x < xmax; x++) {
+        for (size_t x = 0; x < xmax; x++) {
             // Check if the cell is not an obstacle
             if (current_tab[y][x].getState() == 1 || current_tab[y][x].getState() == 0) {
                 // Initialize a counter for the number of live neighbors

@@ -5,7 +5,7 @@ GUI::GUI(int xmax, int ymax, GameLogic& gameLogic) :
     length(xmax), /* Number of rows in the grid */
     height(ymax), /* Number of columns in the grid */
     gameLogic(gameLogic), /* Reference to the GameLogic object */
-    cell_size(std::max(5,2000/int(xmax * ymax))), /* Calculate cell size based on grid size */
+    cell_size(std::max(5, 2000 / int(xmax * ymax))), /* Calculate cell size based on grid size */
     window(sf::VideoMode(xmax * cell_size, ymax * cell_size + 50) /* Create window with specified size */,
     "Game of Life, groupe 4" ) {
 
